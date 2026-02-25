@@ -1,17 +1,18 @@
 import { ChromaClient } from 'chromadb';
 import OpenAI from 'openai';
-import dotenv from 'dotenv';
+let openai: OpenAI | null = null;
 
-dotenv.config();
-
-const CHROMA_URL = process.env.CHROMA_URL || 'http://localhost:8000';
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
+function getOpenAIClient() {
+  if (!openai && process.env.OPENAI_API_KEY) {
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return openai;
+}
 let client: ChromaClient | null = null;
 
 export async function getChromaClient() {
   if (!client) {
+    const CHROMA_URL = process.env.CHROMA_URL || 'http://localhost:8000';
     client = new ChromaClient({ path: CHROMA_URL });
   }
   return client;
@@ -23,7 +24,10 @@ async function generateEmbeddings(texts: string[]) {
 
   for (let i = 0; i < texts.length; i += batchSize) {
     const batch = texts.slice(i, i + batchSize);
-    const response = await openai.embeddings.create({
+    const client = getOpenAIClient();
+    if (!client) throw new Error('OpenAI client not configured for embeddings');
+    
+    const response = await client.embeddings.create({
       model: 'text-embedding-3-small',
       input: batch,
     });

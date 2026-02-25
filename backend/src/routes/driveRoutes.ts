@@ -3,7 +3,7 @@ import { getGoogleDriveFolders, triggerFolderIngestion } from '../controllers/dr
 
 const router = express.Router();
 
-router.post('/folders', getGoogleDriveFolders);
+router.get('/folders', getGoogleDriveFolders);
 router.post('/ingest', triggerFolderIngestion);
 
 export default router;

@@ -9,7 +9,8 @@ import { normalizeCitations } from './citation.service.js';
 
 export async function startAgent(task: string): Promise<Session> {
   const id = uuidv4();
-  const plan = await generatePlan(task);
+  const planStrings = await generatePlan(task);
+  const plan = planStrings.map(s => ({ description: s, completed: false }));
 
   const session: Session = {
     id,
@@ -39,7 +40,8 @@ async function runLoop(session: Session) {
 
   // Process plan steps, but also allow the agent to iterate based on findings
   while (stepCount < MAX_STEPS) {
-    const currentGoal = session.plan[stepCount] || "Continue investigating the main task";
+    const currentStep = session.plan[stepCount];
+    const currentGoal = currentStep?.description || "Continue investigating the main task";
     
     const toolChoicePrompt = `User Task: "${session.task}"
 Current Goal: "${currentGoal}"
@@ -70,12 +72,39 @@ What should I do next?`;
 
     try {
       const result: ToolResult = await executeTool(toolData.action, toolData.arguments);
-      session.history.push(`Step ${stepCount + 1}: ${currentGoal} -> Action: ${toolData.action}`);
+      
+      session.history.push({
+        role: 'assistant',
+        content: `Calling tool: ${toolData.action}`,
+        timestamp: new Date().toISOString()
+      });
+      
+      session.history.push({
+        role: 'tool',
+        content: `Result from ${toolData.action}: ${result.output.slice(0, 200)}...`,
+        timestamp: new Date().toISOString()
+      });
+
       session.observations.push(result);
-      updateSession(session.id, { history: session.history, observations: session.observations });
+      
+      // Mark step as completed if it exists in plan
+      const stepToUpdate = session.plan[stepCount];
+      if (stepToUpdate) {
+        stepToUpdate.completed = true;
+      }
+
+      updateSession(session.id, { 
+        history: session.history, 
+        observations: session.observations,
+        plan: session.plan 
+      });
     } catch (error) {
       console.error(`Tool ${toolData.action} failed:`, error);
-      session.history.push(`Step ${stepCount + 1} FAILED: ${String(error)}`);
+      session.history.push({
+        role: 'tool',
+        content: `Error: ${String(error)}`,
+        timestamp: new Date().toISOString()
+      });
       updateSession(session.id, { history: session.history });
     }
 

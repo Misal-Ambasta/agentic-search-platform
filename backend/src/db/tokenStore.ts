@@ -22,7 +22,17 @@ export function saveTokens(tokens: AuthTokens, userId: string = DEFAULT_USER_ID)
 }
 
 export function getTokens(userId: string = DEFAULT_USER_ID): AuthTokens | null {
-  const stmt = db.prepare('SELECT tokens FROM auth_tokens WHERE id = ?');
-  const row = stmt.get(userId) as any;
-  return row ? JSON.parse(row.tokens) : null;
+  try {
+    const stmt = db.prepare('SELECT tokens FROM auth_tokens WHERE id = ?');
+    const row = stmt.get(userId) as any;
+    if (!row) return null;
+    return JSON.parse(row.tokens);
+  } catch (error) {
+    console.error('ERROR: Failed to retrieve/parse tokens from DB:', error);
+    return null;
+  }
+}
+export function clearTokens(userId: string = DEFAULT_USER_ID) {
+  const stmt = db.prepare('DELETE FROM auth_tokens WHERE id = ?');
+  stmt.run(userId);
 }
