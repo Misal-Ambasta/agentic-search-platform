@@ -1,0 +1,53 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Production/Build
+dist/
+dist-ssr/
+build/
+backend/dist/
+frontend/dist/
+coverage/
+
+# Databases
+*.db
+*.sqlite
+backend/*.db
+backend/*.sqlite
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+frontend/.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# IDE/Editor
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Specific
+assign*.md
+todo.md
