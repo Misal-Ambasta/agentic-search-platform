@@ -91,7 +91,8 @@ function App() {
   const handleConnect = async () => {
     try {
       const url = await apiService.getAuthUrl();
-      window.location.href = url;
+      // Use location.assign for better browser compatibility with external redirects
+      window.location.assign(url);
     } catch (error) {
       console.error('Failed to get auth URL', error);
       toast.error('Failed to initiate Google Authentication');
