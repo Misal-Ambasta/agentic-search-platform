@@ -8,8 +8,8 @@ export async function parseText(content: string): Promise<string> {
 export async function parsePdf(buffer: Buffer): Promise<string> {
   try {
     const parser = new PDFParse({ data: buffer });
-    await parser.load();
     const result: any = await parser.getText();
+    await parser.destroy(); // Clean up memory
     return result.text || '';
   } catch (error) {
     console.error('PDF parsing error:', error);

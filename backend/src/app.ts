@@ -11,7 +11,17 @@ import driveRoutes from './routes/driveRoutes.js';
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'http://localhost:3001',           // Local frontend
+    'https://agentic-search-platform.vercel.app',  // Deployed frontend
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get('/health', (req: Request, res: Response) => {
