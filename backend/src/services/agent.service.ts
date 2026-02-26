@@ -5,7 +5,7 @@ import { generatePlan } from './planner.service.js';
 import { executeTool } from './tool.service.js';
 import { chatCompletion } from './llm.service.js';
 import { AGENT_SYSTEM_PROMPT, SYNTHESIZER_SYSTEM_PROMPT } from '../config/prompts.js';
-import { normalizeCitations } from './citation.service.js';
+import { normalizeCitations, getCitations } from './citation.service.js';
 
 export async function startAgent(task: string): Promise<Session> {
   const id = uuidv4();
@@ -112,12 +112,16 @@ What should I do next?`;
   }
 
   // Synthesize final answer using the LLM
+  const citations = getCitations(session.observations);
   const synthPrompt = `User Query: ${session.task}
+
+Available Sources:
+${citations.map(c => `[${c.id}] ${c.source}`).join('\n')}
 
 Observations:
 ${session.observations.map(o => `[Tool: ${o.tool}] Output: ${o.output}`).join('\n\n') }
 
-Synthesize the findings into a final response. Cite sources using [1], [2], etc.`;
+Synthesize the findings into a final response. You MUST cite your sources using the bracketed numbers like [1], [2], etc., corresponding to the sources above. Place the citation immediately after the sentence or claim it supports.`;
 
   const rawFinal = await chatCompletion([
     { role: 'system', content: SYNTHESIZER_SYSTEM_PROMPT },

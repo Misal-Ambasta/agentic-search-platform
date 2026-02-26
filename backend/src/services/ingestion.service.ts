@@ -22,7 +22,6 @@ export function recursiveChunkText(
     }
 
     // Find the first separator that exists in the content
-    let separatorIndex = -1;
     let selectedSeparator = '';
 
     for (const sep of currentSeparators) {
