@@ -23,8 +23,8 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/api/(.*)",
+      "destination": "http://ec2-15-206-166-187.ap-south-1.compute.amazonaws.com:3000/$1"
     }
   ]
 }
