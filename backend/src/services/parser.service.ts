@@ -1,15 +1,20 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const pdf = require('pdf-parse');
 import * as cheerio from 'cheerio';
+import { PDFParse } from 'pdf-parse';
 
 export async function parseText(content: string): Promise<string> {
   return content;
 }
 
 export async function parsePdf(buffer: Buffer): Promise<string> {
-  const data = await pdf(buffer);
-  return data.text;
+  try {
+    const parser = new PDFParse({ data: buffer });
+    await parser.load();
+    const result: any = await parser.getText();
+    return result.text || '';
+  } catch (error) {
+    console.error('PDF parsing error:', error);
+    throw new Error(`Failed to parse PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 }
 
 export async function parseHtml(html: string): Promise<string> {

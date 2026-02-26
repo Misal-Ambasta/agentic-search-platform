@@ -173,8 +173,8 @@ function App() {
               </div>
             ) : (
               <div className="animate-in slide-in-from-bottom-5 duration-500">
-                <div className="flex items-center justify-between mb-8 pb-4 border-b">
-                  <div className="flex items-center gap-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b gap-4">
+                  <div className="flex flex-wrap items-center gap-4 md:gap-6">
                     <div className="px-3 py-1 bg-green-500/10 text-green-500 rounded-full text-xs font-medium flex items-center gap-2 border border-green-500/20">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                       Live Agent
@@ -199,14 +199,16 @@ function App() {
                     <Button variant="ghost" size="sm" onClick={() => handleSetFolder(null)}>
                       Switch Folder
                     </Button>
-                    <div className="w-px h-4 bg-border" />
+                    <div className="hidden md:block w-px h-4 bg-border" />
                     <Button variant="ghost" size="sm" onClick={handleDisconnect} className="text-muted-foreground hover:text-destructive">
                       <LogOut className="w-4 h-4 mr-2" />
                       Disconnect
                     </Button>
                   </div>
                 </div>
-                <AgentInterface />
+                <div className="w-full">
+                    <AgentInterface />
+                </div>
               </div>
             )}
           </div>

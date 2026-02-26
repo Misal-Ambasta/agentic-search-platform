@@ -1,4 +1,4 @@
-import { ChromaClient } from 'chromadb';
+import { ChromaClient, CloudClient } from 'chromadb';
 import OpenAI from 'openai';
 let openai: OpenAI | null = null;
 
@@ -8,12 +8,22 @@ function getOpenAIClient() {
   }
   return openai;
 }
-let client: ChromaClient | null = null;
+let client: ChromaClient | CloudClient | null = null;
 
 export async function getChromaClient() {
   if (!client) {
-    const CHROMA_URL = process.env.CHROMA_URL || 'http://localhost:8000';
-    client = new ChromaClient({ path: CHROMA_URL });
+    if (process.env.CHROMA_CLOUD_API_KEY) {
+      client = new CloudClient({
+        apiKey: process.env.CHROMA_CLOUD_API_KEY,
+        tenant: process.env.CHROMA_CLOUD_TENANT || 'your-tenant-id',
+        database: process.env.CHROMA_CLOUD_DATABASE || 'agentic-search-platform',
+      });
+    } else {
+      // For local development, we expect a running Chroma server
+      // To run locally with persistence: chroma run --path ./chroma-data
+      const CHROMA_URL = process.env.CHROMA_URL || 'http://localhost:8000';
+      client = new ChromaClient({ path: CHROMA_URL });
+    }
   }
   return client;
 }
