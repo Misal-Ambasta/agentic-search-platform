@@ -128,6 +128,3 @@ Add screenshots to illustrate the UI and agent flow. Save images under `frontend
 
     <img width="1897" height="902" alt="image" src="https://github.com/user-attachments/assets/0f2393d9-13e6-4014-8e2f-a5627c3c96ec" />
 
-
-
-If you prefer local paths or a different folder, update the image links accordingly. Screenshots are optional but helpful for demos and documentation.
