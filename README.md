@@ -116,14 +116,15 @@ Add screenshots to illustrate the UI and agent flow. Save images under `frontend
 
 - Connect Google Drive:
 
-    ![Connect Google Drive](frontend/public/screenshots/connect-drive.png)
+    <img width="1897" height="907" alt="image" src="https://github.com/user-attachments/assets/08f45631-1055-4489-aca8-977963dd0747" />
 
 - Indexing / Ingestion view:
 
-    ![Indexing Files](frontend/public/screenshots/indexing.png)
+   <img width="1847" height="883" alt="image" src="https://github.com/user-attachments/assets/9af6248f-78b5-454b-8780-ba317530cba7" />
 
 - Agent running and results with sources:
 
-    ![Agent Run](frontend/public/screenshots/agent-run.png)
+    <img width="1901" height="905" alt="image" src="https://github.com/user-attachments/assets/bbc03e19-7395-42c3-b514-8a64545eb6c0" />
 
-If you prefer local paths or a different folder, update the image links accordingly. Screenshots are optional but helpful for demos and documentation.
+    <img width="1897" height="902" alt="image" src="https://github.com/user-attachments/assets/0f2393d9-13e6-4014-8e2f-a5627c3c96ec" />
+
